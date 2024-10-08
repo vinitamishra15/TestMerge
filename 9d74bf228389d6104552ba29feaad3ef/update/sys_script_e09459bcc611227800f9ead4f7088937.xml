@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>change_request</collection>
+        <condition>current.category=="Service-now Deployment"&amp;&amp; current.approval=="approved"&amp;&amp; current.state=="2"</condition>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>System Deploy Approved</name>
+        <order>100</order>
+        <priority/>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[// redirect to appropriate box for instance creation - CHANGE ME
+// wsdl = "http://www.service-now.com/sac3_monitor/ecc_queue.do?WSDL";
+wsdl = "http://localhost:8080/glide/ecc_queue.do?WSDL";
+
+var cmdb_sysID = current.cmdb_ci;
+
+var url = current.cmdb_ci.getDisplayValue();
+var urlStr = new String(url);
+
+urlStr = urlStr.split(" - ")[1];
+
+var warfile = "glide.war"; // CHANGE ME
+
+var myname = gs.getProperty("glide.db.name");
+
+wsClient = new WSClientAdaptor(wsdl);
+wsClient.setMethodName("insert");
+wsClient.setParameter("agent", "Service-now deployer");
+wsClient.setParameter("name", "system.deploy.create");
+wsClient.setParameter("queue", "input");
+wsClient.setParameter("source", myname);
+wsClient.setParameter("payload", "<deploy><cmdb>" + cmdb_sysID + "</cmdb><url>" + urlStr + "</url><war>" + warfile + "</war></deploy>");
+
+sys_id = wsClient.invokeFiltered("//sys_id");
+
+
+// line 27 for testimg purpose
+// line 28 for testing
+
+// line 30 for testimg ]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>glide.maint</sys_created_by>
+        <sys_created_on>2005-08-22 23:44:42</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path/>
+        <sys_id>e09459bcc611227800f9ead4f7088937</sys_id>
+        <sys_mod_count>28</sys_mod_count>
+        <sys_name>System Deploy Approved</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Deploy" source="com.glideapp.deploy">f97f7faaf8b2021008dd9cfea425acd1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Test_ScopedApp_R2">9d74bf228389d6104552ba29feaad3ef</sys_scope>
+        <sys_update_name>sys_script_e09459bcc611227800f9ead4f7088937</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-10-08 09:27:54</sys_updated_on>
+        <template/>
+        <when>async</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=e09459bcc611227800f9ead4f7088937"/>
+    <sys_claim action="INSERT_OR_UPDATE">
+        <claim_owner_scope display_value="Test_ScopedApp_R2">9d74bf228389d6104552ba29feaad3ef</claim_owner_scope>
+        <claim_timestamp>1926b74dfa30000001</claim_timestamp>
+        <metadata_update_name>sys_script_e09459bcc611227800f9ead4f7088937</metadata_update_name>
+        <previous_claim_app_version>1.0.0</previous_claim_app_version>
+        <previous_claim_name>Test_ScopedApp_R2</previous_claim_name>
+        <previous_claim_scope>9d74bf228389d6104552ba29feaad3ef</previous_claim_scope>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-10-08 09:27:54</sys_created_on>
+        <sys_id>6745e87283c91a104552ba29feaad3a9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-10-08 09:27:54</sys_updated_on>
+    </sys_claim>
+    <sys_claim action="INSERT_OR_UPDATE">
+        <claim_owner_scope display_value="Test_ScopedApp_R2">9d74bf228389d6104552ba29feaad3ef</claim_owner_scope>
+        <claim_timestamp>1926b74dfa20000001</claim_timestamp>
+        <metadata_update_name>sys_script_e09459bcc611227800f9ead4f7088937</metadata_update_name>
+        <previous_claim_app_version/>
+        <previous_claim_name>com.glideapp.deploy</previous_claim_name>
+        <previous_claim_scope>com.glideapp.deploy</previous_claim_scope>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-10-08 09:27:54</sys_created_on>
+        <sys_id>6f45e87283c91a104552ba29feaad3a9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-10-08 09:27:54</sys_updated_on>
+    </sys_claim>
+</record_update>
